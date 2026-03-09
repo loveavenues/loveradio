@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open the Box</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    width:100%;
+    background:#fffbe5;
+    overflow:hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    width:100%;
+    padding:20px;
+}
+
+/* IMAGE */
+
+img{
+    width:100%;
+    max-width:420px;
+    height:auto;
+    transition:opacity .5s ease;
+    cursor:pointer;
+}
+
+/* BUTTON */
+
+button{
+    padding:12px 22px;
+    font-size:16px;
+    cursor:pointer;
+    border:none;
+    background:#967e70;
+    color:white;
+    border-radius:8px;
+}
+
+/* CENTER BUTTON */
+
+#toggleButton{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+/* TEXT */
+
+#messageText{
+    position:absolute;
+    top:8%;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:18px;
+    font-weight:bold;
+    color:#333;
+    display:none;
+    text-align:center;
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    z-index:100;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.6);
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.modal-content{
+  background:rgb(255, 238, 240);
+  padding:28px;
+  border-radius:14px;
+  max-width:420px;
+  max-height:70vh;        /* Limit modal height */
+  width:100%;
+  text-align:center;
+  font-size:18px;
+  line-height:1.6;
+  position:relative;
+  animation:popup .4s ease;
+  overflow-y:auto;        /* Add vertical scroll if content exceeds height */
+}
+
+.close{
+    position:absolute;
+    right:15px;
+    top:10px;
+    font-size:24px;
+    cursor:pointer;
+}
+
+/* ANIMATION */
+
+@keyframes popup{
+    from{
+        transform:scale(.75);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* MOBILE OPTIMIZATION */
+
+@media (max-width:600px){
+
+    img{
+        max-width:320px;
+    }
+
+    #messageText{
+        font-size:16px;
+    }
+
+    button{
+        font-size:15px;
+        padding:10px 18px;
+    }
+
+    .modal-content{
+      font-size:16px;
+      padding:22px;
+      max-height:60vh;   /* Slightly smaller on mobile */
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<p id="messageText">Click the hearts</p>
+
+<img id="box" src="./assets/1.png" alt="Closed Box" onclick="openMessage()">
+
+<button id="toggleButton" onclick="toggleBox()">Open the box</button>
+
+<div id="confetti-container"></div>
+
+</div>
+
+<!-- MODAL -->
+
+<div id="messageModal" class="modal">
+<div class="modal-content">
+
+<span class="close">&times;</span>
+
+<p>
+  Hi love… <br><br>
+
+If you’re hearing this, it means you opened the little surprise I made for you. I just wanted to take a moment to remind you how much you mean to me. Sometimes life gets busy and we forget to say these things, but I never want you to doubt how special you are to me.
+
+You make my days brighter in ways you probably don’t even realize. Even the smallest things you do can make me smile, and just knowing that you’re there makes everything feel a little lighter and a little happier.
+
+Thank you for being patient with me, for listening to me, and for always being someone I can lean on. I truly appreciate you more than words can explain.
+
+I hope this small surprise made you smile, even just for a moment. And whenever you’re having a hard day, I hope you remember that there’s someone out here who cares about you very much.
+
+Take care of yourself, okay? And don’t forget… you mean a lot to me. 💛
+</p>
+
+</div>
+</div>
+
+<!-- AUDIO -->
+
+<audio id="voiceMessage" src="./assets/voiceover.mp3"></audio>
+
+<script>
+
+let isOpen = false;
+
+function toggleBox(){
+
+    const box = document.getElementById("box");
+    const button = document.getElementById("toggleButton");
+    const messageText = document.getElementById("messageText");
+
+    if(isOpen){
+
+        box.src="./assets/1.png";
+        button.style.display="block";
+        messageText.style.display="none";
+        isOpen=false;
+
+    }else{
+
+        box.src="./assets/2.png";
+        button.style.display="none";
+        messageText.style.display="block";
+        isOpen=true;
+
+    }
+}
+
+function openMessage(){
+
+    const box = document.getElementById("box");
+    const modal = document.getElementById("messageModal");
+    const audio = document.getElementById("voiceMessage");
+
+    if(box.src.includes("2.png")){
+
+        modal.style.display="flex";
+
+        audio.currentTime = 0;
+        audio.play().catch(e=>console.log(e));
+
+    }
+
+}
+
+const modal = document.getElementById("messageModal");
+const closeBtn = document.querySelector(".close");
+
+closeBtn.onclick = function(){
+    modal.style.display="none";
+}
+
+window.onclick = function(event){
+    if(event.target === modal){
+        modal.style.display="none";
+    }
+}
+
+</script>
+
+</body>
+</html>
